@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# https://medium.com/swlh/compiling-rust-for-raspberry-pi-arm-922b55dbb050
+
+set -o errexit
+set -o nounset
+set -o pipefail
+set -o xtrace
+
+readonly TARGET_HOST=pi@192.168.1.135
+readonly TARGET_PATH=/home/pi/prod/shoppinglist/shoppinglist
+readonly TARGET_ARCH=aarch64-unknown-linux-gnu
+readonly SOURCE_PATH=./target/${TARGET_ARCH}/release/shoppinglist
+
+cargo build --release --target=${TARGET_ARCH}
+chmod +x ${SOURCE_PATH}
+rsync -v ${SOURCE_PATH} ${TARGET_HOST}:${TARGET_PATH}
+ssh -t ${TARGET_HOST} sudo systemctl restart shoppinglist.service
