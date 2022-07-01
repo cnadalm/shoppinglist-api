@@ -10,6 +10,7 @@ pub struct ShoppingListItem {
     pub id: String,
     pub name: String,
     pub quantity: String,
+    pub image: Option<String>, // Base64
     pub created_at: String,
 }
 
@@ -25,12 +26,13 @@ impl ShoppingListItem {
 
         sqlx::query!(
             r#"
-                INSERT INTO shopping_list_item(id, name, quantity, created_at)
-                VALUES($1, $2, $3, $4)
+                INSERT INTO shopping_list_item(id, name, quantity, image, created_at)
+                VALUES($1, $2, $3, $4, $5)
                 "#,
             id,
             request.name,
             request.quantity,
+            request.image,
             created_at
         )
         .execute(&mut tx)
@@ -45,7 +47,7 @@ impl ShoppingListItem {
         let items = sqlx::query_as!(
             ShoppingListItem,
             r#"
-                SELECT id, name, quantity, created_at
+                SELECT id, name, quantity, image, created_at
                 FROM shopping_list_item
                 "#
         )
@@ -78,6 +80,7 @@ impl ShoppingListItem {
 pub struct CreateShoppingListItemRequest {
     name: String,
     quantity: String,
+    image: Option<String>, // Base64
 }
 
 #[derive(Serialize)]

@@ -3,5 +3,6 @@ CREATE TABLE "shopping_list_item"(
 	id TEXT PRIMARY KEY NOT NULL,
 	"name" TEXT NOT NULL,
 	quantity TEXT NOT NULL,
+	image TEXT,
 	created_at TEXT NOT NULL
 );
