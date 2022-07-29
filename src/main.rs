@@ -59,8 +59,8 @@ async fn main() -> Result<()> {
             .app_data(Data::new(db_pool.clone()))
             .wrap(cors)
             .wrap(middleware::Logger::default())
-            .configure(shopping_list::config)
             .route("/", web::get().to(index))
+            .configure(shopping_list::config)
     })
     .bind(address)?;
     server.run().await?;
